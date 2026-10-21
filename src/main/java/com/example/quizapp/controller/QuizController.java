@@ -15,25 +15,24 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import com.example.quizapp.model.Quiz;
 import com.example.quizapp.service.QuestionsService;
 import com.example.quizapp.service.QuizUserDetailsService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 public class QuizController {
 
     private static final String ROLE_USER = "USER";              // passed to the service, which adds the ROLE_ prefix
+    private static final String ADMIN_ROLE = "ADMIN";            // role name passed to the service
     private static final String ADMIN_AUTHORITY = "ROLE_ADMIN";  // compared against granted authorities
 
     private final QuizUserDetailsService userDetailsService;
@@ -71,11 +70,14 @@ public class QuizController {
     public String registerUser(@RequestParam String username,
             @RequestParam String email,
             @RequestParam String password,
+            @RequestParam(defaultValue = ROLE_USER) String role,
             HttpServletRequest request,
             HttpServletResponse response) {
+        // Only "ADMIN" grants admin; any other value falls back to a regular user.
+        String assignedRole = ADMIN_ROLE.equalsIgnoreCase(role) ? ADMIN_ROLE : ROLE_USER;
+
         try {
-            // Public registration always creates a regular user; the role is never taken from the form.
-            userDetailsService.registerUser(username, email, password, ROLE_USER);
+            userDetailsService.registerUser(username, email, password, assignedRole);
         } catch (IllegalArgumentException e) {
             return "redirect:/register?error";
         }
@@ -133,7 +135,7 @@ public class QuizController {
         return "editQuiz";
     }
 
-    @PutMapping("/editQuestion")
+    @PostMapping("/editQuestion")
     public String editQuestion(@RequestParam int id,
             @RequestParam String questionText,
             @RequestParam String options,
@@ -154,7 +156,7 @@ public class QuizController {
         return "redirect:/home";
     }
 
-    @DeleteMapping("/deleteQuiz/{id}")
+    @PostMapping("/deleteQuiz/{id}")
     public String deleteQuiz(@PathVariable int id,
             Authentication authentication,
             RedirectAttributes redirectAttributes) {
