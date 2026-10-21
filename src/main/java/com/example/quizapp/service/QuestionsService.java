@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,13 @@ public class QuestionsService {
         if (quizzes.remove(id) == null) {
             throw new IllegalArgumentException("Quiz not found with ID: " + id);
         }
+    }
+
+    // Source of unique quiz IDs. Starts at 1 and never reuses a value, even after deletes.
+    private final AtomicInteger idCounter = new AtomicInteger(0);
+
+    public Integer nextId() {
+        return idCounter.incrementAndGet();
     }
 
     private Integer requireId(Quiz quiz) {
