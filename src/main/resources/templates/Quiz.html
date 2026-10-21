@@ -77,9 +77,9 @@
             <div class="options">
                 <ul>
                     <li th:each="option, optStat : ${quiz.options}">
-                        <input type="radio" th:name="${'answer' + iterStat.index}" th:value="${option}"
-                            th:id="${'option' + iterStat.index + '-' + optStat.index}" required>
-                        <label th:for="${'option' + iterStat.index + '-' + optStat.index}" th:text="${option}"></label>
+                        <input type="radio" th:name="${'answer' + quiz.id}" th:value="${option}"
+                            th:id="${'option' + quiz.id + '-' + optStat.index}" required>
+                        <label th:for="${'option' + quiz.id + '-' + optStat.index}" th:text="${option}"></label>
                     </li>
                 </ul>
             </div>

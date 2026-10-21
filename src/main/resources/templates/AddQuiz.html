@@ -106,7 +106,7 @@
             <!-- Options -->
             <div class="form-group">
                 <label for="options">Options (comma-separated):</label>
-                <input type="text" id="options" th:field="*{options}" required>
+                <input type="text" id="options" name="options" required>
                 <span th:if="${#fields.hasErrors('options')}" th:errors="*{options}" class="error-message"></span>
             </div>
 

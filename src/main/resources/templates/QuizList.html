@@ -123,9 +123,9 @@
                 <button class="edit-quiz-button">Edit Quiz</button>
             </a>
             <!-- Delete Button -->
-            <a th:href="@{/deleteQuiz/{id}(id=${quiz.id})}">
-                <button class="delete-quiz-button">Delete Quiz</button>
-            </a>
+            <form th:action="@{/deleteQuiz/{id}(id=${quiz.id})}" method="post" style="display:inline;">
+                <button type="submit" class="delete-quiz-button">Delete Quiz</button>
+            </form>
         </div>
     </div>
 </body>
