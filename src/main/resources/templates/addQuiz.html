@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Edit Quiz</title>
+    <title>Add Quiz</title>
     <style>
         /* General styles */
         body {
@@ -91,13 +91,10 @@
 <body>
     <div class="form-container">
         <!-- Form header -->
-        <div class="form-header">Edit Quiz</div>
+        <div class="form-header">Add a New Quiz</div>
 
         <!-- Form -->
-        <form th:action="@{/editQuestion}" method="post" th:object="${quiz}">
-            <!-- Hidden field for quiz ID -->
-            <input type="hidden" th:field="*{id}" />
-
+        <form th:action="@{/addQuiz}" method="post" th:object="${quiz}">
             <!-- Question -->
             <div class="form-group">
                 <label for="questionText">Question:</label>
@@ -109,7 +106,7 @@
             <!-- Options -->
             <div class="form-group">
                 <label for="options">Options (comma-separated):</label>
-                <input type="text" id="options" th:value="${quiz.getOptionsAsString()}" name="options" required>
+                <input type="text" id="options" name="options" required>
                 <span th:if="${#fields.hasErrors('options')}" th:errors="*{options}" class="error-message"></span>
             </div>
 
@@ -122,7 +119,7 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" class="submit-button">Update Quiz</button>
+            <button type="submit" class="submit-button">Add Quiz</button>
         </form>
     </div>
 </body>
